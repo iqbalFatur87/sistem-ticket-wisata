@@ -2,7 +2,7 @@
   <div id="app">
     <div>
       <Navbar v-if="shouldShowNavbar" :brandName="brandName" :homeLink="homeLink" :navLinks="navLinks" />
-      <router-view />
+      <router-view :key="$route.fullPath" />
     </div>
   </div>
 </template>
@@ -21,9 +21,9 @@ export default {
       navLinks: [
         { to: '/', text: 'Login' },
         { to: '/home', text: 'Home' },
-        { to: '/transactions', text: 'Transactions' },
+        { to: '/transaction', text: 'Transaction' },
         { to: '/products', text: 'Products' },
-        { to: '/account', text: 'Account' },
+        { to: '/accounts', text: 'Account' },
       ],
       showNavbar: true,
     };
