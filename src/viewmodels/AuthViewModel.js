@@ -7,6 +7,8 @@ export default {
             password: '',
             loggedIn: false,
             loggedInUser: '',
+            userData: null,
+            authToken: null,
         };
     },
     methods: {
@@ -26,7 +28,14 @@ export default {
                 // Optionally, you can save user data and token to localStorage or Vuex store
                 localStorage.setItem('user', JSON.stringify(this.userData));
                 localStorage.setItem('token', this.authToken);
-
+                 // Redirect to home page and pass user data and token as props
+                this.$router.push({
+                    path: '/home',
+                    query: {
+                        userData: JSON.stringify(this.userData),
+                        authToken: this.authToken,
+                    },
+                });
                 // Redirect to home page after a short delay (e.g., 2 seconds)
                 setTimeout(() => {
                     this.$router.push('/home');
