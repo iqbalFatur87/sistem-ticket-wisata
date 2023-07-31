@@ -28,6 +28,29 @@ export default {
       showNavbar: true,
     };
   },
+  updatedPageTitle() {
+    // Set the page title based on the current route
+    switch (this.$route.path) {
+      case '/':
+        document.title = 'Login - Admin Toko';
+        break
+      case '/home':
+        document.title = 'Home - Admin Toko';
+        break;
+      case '/transaction':
+        document.title = 'Transaction - Admin Toko';
+        break;
+      case '/products':
+        document.title = 'Products - Admin Toko';
+        break;
+      case '/accounts':
+        document.title = 'Account - Admin Toko';
+        break;
+      default:
+        document.title = 'Admin Toko';
+        break;        
+    }
+  },
   computed: {
     shouldShowNavbar() {
       const hideNavbarRoutes = ['/'];
