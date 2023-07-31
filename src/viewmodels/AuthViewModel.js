@@ -7,19 +7,35 @@ export default {
             password: '',
             loggedIn: false,
             loggedInUser: '',
+            userData: null,
+            authToken: null,
         };
     },
     methods: {
         async login() {
             try {
-                const user = await User.login(this.email, this.password);
+                const response = await User.login(this.email, this.password);
+                const { user, token } = response.data;
 
                 // Set view model properties to reflect login status
                 this.loggedIn = true;
-                this.loggedInUser = user.name; // Assuming the user object contains the name
+                this.loggedInUser = user.name;
 
-                // Store user data in localStorage or Vuex store (optional)
+                // Store user data and token in constant variables
+                this.userData = user;
+                this.authToken = token;
 
+                // Optionally, you can save user data and token to localStorage or Vuex store
+                localStorage.setItem('user', JSON.stringify(this.userData));
+                localStorage.setItem('token', this.authToken);
+                 // Redirect to home page and pass user data and token as props
+                this.$router.push({
+                    path: '/home',
+                    query: {
+                        userData: JSON.stringify(this.userData),
+                        authToken: this.authToken,
+                    },
+                });
                 // Redirect to home page after a short delay (e.g., 2 seconds)
                 setTimeout(() => {
                     this.$router.push('/home');
@@ -36,7 +52,13 @@ export default {
             this.loggedIn = false;
             this.loggedInUser = '';
 
-            // Clear user data from localStorage or Vuex store (optional)
+            // Clear user data and token from constant variables
+            this.userData = null;
+            this.authToken = null;
+
+            // Optionally, you can also remove user data and token from localStorage or Vuex store
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
 
             // Redirect to login page
             this.$router.push('/');
