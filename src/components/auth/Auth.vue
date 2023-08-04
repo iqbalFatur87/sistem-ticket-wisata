@@ -38,6 +38,7 @@
         aria-labelledby="errorModalLabel"
         aria-hidden="true"
       >
+      <!-- Error Modals-->
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -93,16 +94,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import User from "/src/models/User.js";
 import AuthViewModel from "../../viewmodels/AuthViewModel";
 
 export default {
   mixins: [AuthViewModel],
-  data() {
-    return {
-      email: "",
-      password: "",
-    };
+  computed: {
+    ...mapState(["userData", "authToken"]),
   },
   methods: {
     async login() {
@@ -110,9 +109,9 @@ export default {
         const response = await User.login(this.email, this.password);
         const { user, token } = response.data;
 
-        // Store user data and token in the viewmodel
-        this.userData = user;
-        this.authToken = token;
+        // Commit mutations to set the userData and authToken in the Vuex store
+        await this.$store.commit('setUserData', user);
+        await this.$store.commit('setAuthToken', token);
 
         // Successful login, store user data in localStorage or Vuex store
         localStorage.setItem("user", JSON.stringify(user));
